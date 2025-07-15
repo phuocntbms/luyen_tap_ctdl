@@ -1289,9 +1289,110 @@
             }
         });
 
-        // Hiển thị modal xem lại câu sai (sẽ bổ sung giao diện ở bước sau)
+        // Hiển thị modal xem lại câu sai
         function showWrongAnswersModal() {
-            alert('Tính năng xem lại câu sai sẽ được bổ sung giao diện chi tiết ở bước tiếp theo!');
+            const key = 'quiz_wrong_answers';
+            let wrongs = [];
+            try {
+                wrongs = JSON.parse(localStorage.getItem(key)) || [];
+            } catch (e) {
+                wrongs = [];
+            }
+            
+            if (wrongs.length === 0) {
+                alert('Bạn chưa có câu nào làm sai!');
+                return;
+            }
+            
+            // Tạo modal HTML
+            const modalHTML = `
+                <div id="wrong-answers-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div class="bg-white rounded-lg p-6 max-w-4xl w-full mx-4 max-h-[80vh] overflow-y-auto">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-2xl font-bold text-gray-800">Xem lại câu sai (${wrongs.length} câu)</h2>
+                            <button onclick="closeWrongAnswersModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            ${wrongs.map((wrong, index) => `
+                                <div class="border rounded-lg p-4 bg-gray-50">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <span class="text-sm text-gray-600">Câu ${index + 1}</span>
+                                        <button onclick="removeWrongAnswer(${index})" class="text-red-500 hover:text-red-700 text-sm">Xóa</button>
+                                    </div>
+                                    <h3 class="font-semibold text-gray-800 mb-3">${wrong.question}</h3>
+                                    <div class="space-y-2">
+                                        ${wrong.options.map((option, optIndex) => {
+                                            let className = 'p-2 rounded border';
+                                            if (optIndex === wrong.answerIndex) {
+                                                className += ' bg-green-100 border-green-300';
+                                            } else if (optIndex === wrong.selectedIndex) {
+                                                className += ' bg-red-100 border-red-300';
+                                            } else {
+                                                className += ' bg-white border-gray-200';
+                                            }
+                                            return `<div class="${className}">
+                                                ${optIndex === wrong.answerIndex ? '✓ ' : optIndex === wrong.selectedIndex ? '✗ ' : ''}${option}
+                                            </div>`;
+                                        }).join('')}
+                                    </div>
+                                    <div class="mt-2 text-sm text-gray-600">
+                                        <span class="text-green-600">✓ Đáp án đúng</span> | 
+                                        <span class="text-red-600">✗ Đáp án bạn chọn</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="mt-6 flex justify-between">
+                            <button onclick="clearAllWrongAnswers()" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors">
+                                Xóa tất cả
+                            </button>
+                            <button onclick="closeWrongAnswersModal()" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors">
+                                Đóng
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Thêm modal vào body
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+        }
+        
+        // Đóng modal
+        function closeWrongAnswersModal() {
+            const modal = document.getElementById('wrong-answers-modal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+        
+        // Xóa một câu sai
+        function removeWrongAnswer(index) {
+            const key = 'quiz_wrong_answers';
+            let wrongs = [];
+            try {
+                wrongs = JSON.parse(localStorage.getItem(key)) || [];
+            } catch (e) {
+                wrongs = [];
+            }
+            
+            wrongs.splice(index, 1);
+            localStorage.setItem(key, JSON.stringify(wrongs));
+            
+            // Refresh modal
+            closeWrongAnswersModal();
+            showWrongAnswersModal();
+        }
+        
+        // Xóa tất cả câu sai
+        function clearAllWrongAnswers() {
+            if (confirm('Bạn có chắc muốn xóa tất cả câu sai?')) {
+                localStorage.removeItem('quiz_wrong_answers');
+                closeWrongAnswersModal();
+                alert('Đã xóa tất cả câu sai!');
+            }
         }
 
         // Show feedback for selected answer
