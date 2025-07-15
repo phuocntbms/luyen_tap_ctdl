@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luyện Tập Trắc Nghiệm</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        success: '#10B981',
+                        error: '#EF4444'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">Luyện Tập Trắc Nghiệm</h1>
+            <p class="text-gray-600">Cấu trúc dữ liệu và thuật toán</p>
+        </div>
+
+        <!-- Quiz Container -->
+        <div id="quiz-container" class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <!-- Progress Bar -->
+            <div class="mb-6">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-sm font-medium text-gray-700">Tiến độ</span>
+                    <span id="progress-text" class="text-sm font-medium text-primary">1/56</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div id="progress-bar" class="bg-primary h-2 rounded-full transition-all duration-300" style="width: 1.79%"></div>
+                </div>
+            </div>
+
+            <!-- Question -->
+            <div id="question-container" class="mb-6">
+                <h2 id="question-text" class="text-xl font-semibold text-gray-800 mb-4"></h2>
+                
+                <!-- Options -->
+                <div id="options-container" class="space-y-3">
+                    <!-- Options will be populated by JavaScript -->
+                </div>
+
+                <!-- Feedback Message -->
+                <div id="feedback-container" class="mt-4 p-4 rounded-lg hidden">
+                    <div id="feedback-message" class="font-semibold"></div>
+                    <div id="correct-answer" class="mt-2 text-sm text-gray-600"></div>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="flex justify-between items-center">
+                <button id="prev-btn" class="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    Câu trước
+                </button>
+                
+                <button id="next-btn" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-blue-600 transition-colors">
+                    Câu tiếp
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Container -->
+        <div id="results-container" class="bg-white rounded-lg shadow-lg p-6 hidden">
+            <div class="text-center mb-6">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Kết quả</h2>
+                <p id="score-text" class="text-lg text-gray-600"></p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold mr-3">✓</div>
+                        <div>
+                            <p class="font-semibold text-green-800">Đúng</p>
+                            <p id="correct-count" class="text-green-600">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-red-50 p-4 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white font-bold mr-3">✗</div>
+                        <div>
+                            <p class="font-semibold text-red-800">Sai</p>
+                            <p id="incorrect-count" class="text-red-600">0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button id="restart-btn" class="px-8 py-3 bg-primary text-white rounded-lg hover:bg-blue-600 transition-colors">
+                    Làm lại
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Quiz data with all 56 questions
+        const quizData = [
+            {
+                "question": "Câu nào sau đây mô tả đúng về cấu trúc dữ liệu?",
+                "options": [
+                    "Một cách lưu trữ dữ liệu cố định",
+                    "Một thuật toán sắp xếp dữ liệu",
+                    "Một ngôn ngữ lập trình cấp cao",
+                    "Một cách tổ chức và lưu trữ dữ liệu hiệu quả"
+                ],
+                "answerIndex": 3
+            },
+            {
+                "question": "Cấu trúc dữ liệu nào lưu trữ dữ liệu dạng tuần tự?",
+                "options": [
+                    "Đồ thị",
+                    "Cây",
+                    "Mảng",
+                    "Bảng băm"
+                ],
+                "answerIndex": 2
+            },
+            {
+                "question": "Phương pháp nào sau đây không phải là cách tổ chức dữ liệu?",
+                "options": [
+                    "Sắp xếp (Sorting)",
+                    "Lưu trữ liên kết (Linked)",
+                    "Lưu trữ tuần tự (Sequential)",
+                    "Biểu diễn số (Number Representation)"
+                ],
+                "answerIndex": 3
+            },
+            {
+                "question": "Cấu trúc dữ liệu nào có thể thay đổi kích thước động trong C?",
+                "options": [
+                    "Cây AVL",
+                    "Ngăn xếp tĩnh",
+                    "Mảng tĩnh",
+                    "Linked List"
+                ],
+                "answerIndex": 3
+            },
+            {
+                "question": "Kiểu dữ liệu trừu tượng nào sau đây sử dụng nguyên lý LIFO?",
+                "options": [
+                    "Hàng đợi (Queue)",
+                    "Ngăn xếp (Stack)",
+                    "Mảng (Array)",
+                    "Cây nhị phân (Binary Tree)"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Trong ngôn ngữ C, cấp phát động được thực hiện bằng hàm nào?",
+                "options": [
+                    "calloc()",
+                    "malloc()",
+                    "realloc()",
+                    "Tất cả các đáp án trên"
+                ],
+                "answerIndex": 3
+            },
+            {
+                "question": "Cách nào dưới đây không phải là cấu trúc dữ liệu?",
+                "options": [
+                    "Cây",
+                    "Ngăn xếp",
+                    "Hàng đợi",
+                    "Tìm kiếm nhị phân"
+                ],
+                "answerIndex": 3
+            },
+            {
+                "question": "Đâu là lợi ích của cấu trúc dữ liệu?",
+                "options": [
+                    "Tiết kiệm bộ nhớ",
+                    "Tối ưu hóa thời gian xử lý",
+                    "Lưu trữ và quản lý dữ liệu dễ dàng",
+                    "Tất cả các đáp án trên"
+                ],
+                "answerIndex": 3
+            },
+            {
+                "question": "Tính năng nào không phải là đặc trưng của danh sách liên kết?",
+                "options": [
+                    "Kích thước động",
+                    "Chèn phần tử dễ dàng",
+                    "Truy cập ngẫu nhiên nhanh",
+                    "Quản lý bộ nhớ tốt hơn"
+                ],
+                "answerIndex": 2
+            },
+            {
+                "question": "Câu lệnh nào trong C dùng để giải phóng bộ nhớ đã cấp phát động?",
+                "options": [
+                    "delete()",
+                    "remove()",
+                    "release()",
+                    "free()"
+                ],
+                "answerIndex": 3
+            },
+            {
+                "question": "Mảng được lưu trữ trong bộ nhớ dưới dạng gì?",
+                "options": [
+                    "Ngăn xếp",
+                    "Bộ đệm",
+                    "Khối bộ nhớ liên tiếp",
+                    "Danh sách liên kết"
+                ],
+                "answerIndex": 2
+            },
+            {
+                "question": "Câu nào mô tả đúng về mảng tĩnh trong C?",
+                "options": [
+                    "Có thể thay đổi kích thước sau khi khai báo",
+                    "Có kích thước cố định khi khai báo",
+                    "Không cần khai báo trước",
+                    "Chỉ lưu trữ các số nguyên"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Mảng động có thể khai báo trong C bằng cách nào?",
+                "options": [
+                    "int *arr = (int*)malloc(n * sizeof(int));",
+                    "int arr[n];",
+                    "int arr = new int[n];",
+                    "Không thể khai báo động trong C"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Chỉ số đầu tiên của mảng trong C là:",
+                "options": [
+                    "-1",
+                    "0",
+                    "1",
+                    "2"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Lệnh nào truy cập phần tử thứ 4 của mảng int a[10];",
+                "options": [
+                    "a[4]",
+                    "a[3]",
+                    "a(4)",
+                    "a{4}"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Phép gán giá trị cho mảng a[2] = 5; có ý nghĩa gì?",
+                "options": [
+                    "Gán giá trị 2 cho phần tử a[5]",
+                    "Gán giá trị 5 cho phần tử thứ ba của mảng a",
+                    "Gán giá trị 5 cho phần tử thứ hai của mảng a",
+                    "Gán giá trị a[5] cho phần tử a[2]"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Nếu int a[5] = {1, 2, 3};, thì a[3] là gì?",
+                "options": [
+                    "3",
+                    "0",
+                    "1",
+                    "Giá trị khác"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Kích thước của mảng int b[10]; trong byte là:",
+                "options": [
+                    "10",
+                    "20",
+                    "40 (với int = 4 byte)",
+                    "Không xác định"
+                ],
+                "answerIndex": 2
+            },
+            {
+                "question": "Lệnh nào để nhập phần tử thứ 5 của mảng arr?",
+                "options": [
+                    "scanf(\"%d\", &arr[4]);",
+                    "Nhập từ arr[6]",
+                    "input(arr[5]);",
+                    "scanf(\"%d\", &arr[5]);"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Mảng hai chiều trong C được khai báo thế nào?",
+                "options": [
+                    "int a[3][3];",
+                    "int[3,3] a;",
+                    "int 2D[3][3];",
+                    "array(3,3);"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Ngăn xếp hoạt động theo nguyên tắc nào?",
+                "options": [
+                    "FIFO",
+                    "LIFO",
+                    "FILO",
+                    "LILO"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Hàm nào dùng để thêm phần tử vào ngăn xếp?",
+                "options": [
+                    "pop",
+                    "push",
+                    "insert",
+                    "enqueue"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Hàng đợi hoạt động theo nguyên tắc nào?",
+                "options": [
+                    "LIFO",
+                    "LILO",
+                    "FILO",
+                    "FIFO"
+                ],
+                "answerIndex": 3
+            },
+            {
+                "question": "Thao tác nào dùng để xóa phần tử khỏi ngăn xếp?",
+                "options": [
+                    "pop",
+                    "remove",
+                    "dequeue",
+                    "push"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Cấu trúc hàng đợi ưu tiên khác hàng đợi thông thường ở điểm nào?",
+                "options": [
+                    "Xóa phần tử theo thứ tự ưu tiên",
+                    "Không có phần tử đầu tiên",
+                    "Thêm phần tử ở đầu hàng đợi",
+                    "Không có phần tử cuối cùng"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Ngăn xếp được sử dụng chủ yếu trong:",
+                "options": [
+                    "Đệ quy và duyệt đồ thị",
+                    "Xếp hàng trong hệ điều hành",
+                    "Tìm kiếm nhị phân",
+                    "Lưu trữ tạm thời"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Hàng đợi vòng (Circular Queue) có ưu điểm gì?",
+                "options": [
+                    "Tái sử dụng không gian trống",
+                    "Không giới hạn kích thước",
+                    "Dễ dàng triển khai",
+                    "Tối ưu tốc độ chèn"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Nếu ngăn xếp bị tràn, nó xảy ra trong tình huống nào?",
+                "options": [
+                    "Khi ngăn xếp bị đầy",
+                    "Khi không còn bộ nhớ để cấp phát",
+                    "Khi không có phần tử nào trong ngăn xếp",
+                    "Khi con trỏ trỏ đến NULL"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Ngăn xếp thường được sử dụng trong quá trình nào của ngôn ngữ lập trình C?",
+                "options": [
+                    "Quản lý biến toàn cục",
+                    "Khai báo biến",
+                    "Quản lý lời gọi hàm đệ quy",
+                    "Cấp phát bộ nhớ động"
+                ],
+                "answerIndex": 2
+            },
+            {
+                "question": "Biểu diễn ngăn xếp bằng danh sách liên kết có ưu điểm gì?",
+                "options": [
+                    "Kích thước động",
+                    "Dễ dàng thêm và xóa phần tử",
+                    "Không bị tràn ngăn xếp",
+                    "Tất cả các đáp án trên"
+                ],
+                "answerIndex": 3
+            },
+            {
+                "question": "Loại cây nào mà mỗi nút có tối đa hai con?",
+                "options": [
+                    "Cây AVL",
+                    "Cây nhị phân",
+                    "Cây cân bằng",
+                    "Cây tìm kiếm nhị phân"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Cây tìm kiếm nhị phân có đặc điểm gì?",
+                "options": [
+                    "Nút phải lớn hơn nút gốc",
+                    "Có thứ tự sắp xếp các phần tử",
+                    "Tất cả các đáp án trên",
+                    "Nút trái nhỏ hơn nút gốc"
+                ],
+                "answerIndex": 2
+            },
+            {
+                "question": "Duyệt cây theo thứ tự trung (In-order Traversal) có kết quả nào?",
+                "options": [
+                    "Gốc - Trái - Phải",
+                    "Trái - Gốc - Phải",
+                    "Trái - Phải - Gốc",
+                    "Phải - Gốc - Trái"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Trong đồ thị có hướng, số cung đi vào một đỉnh được gọi là:",
+                "options": [
+                    "Bậc vào (In-degree)",
+                    "Bậc ra (Out-degree)",
+                    "Cạnh vào",
+                    "Trọng số"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Cách biểu diễn đồ thị nào sử dụng ma trận hai chiều?",
+                "options": [
+                    "Danh sách kề",
+                    "Ma trận kề",
+                    "Cây nhị phân",
+                    "Cây tìm kiếm"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Loại đồ thị không có chu trình là:",
+                "options": [
+                    "Đồ thị trọng số",
+                    "Đồ thị có hướng",
+                    "Đồ thị vô hướng",
+                    "Cây"
+                ],
+                "answerIndex": 3
+            },
+            {
+                "question": "Tìm kiếm theo chiều rộng (BFS) sử dụng cấu trúc dữ liệu nào?",
+                "options": [
+                    "Hàng đợi (Queue)",
+                    "Ngăn xếp (Stack)",
+                    "Danh sách kề",
+                    "Bảng băm"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Cây AVL là gì?",
+                "options": [
+                    "Cây không có thứ tự",
+                    "Cây nhị phân có độ cao cân bằng",
+                    "Cây không có nút lá",
+                    "Cây không có nút gốc"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Đồ thị vô hướng là gì?",
+                "options": [
+                    "Đồ thị không có cạnh",
+                    "Đồ thị có cạnh hai chiều",
+                    "Đồ thị có cạnh một chiều",
+                    "Đồ thị có nút gốc"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Danh sách liên kết đơn là gì?",
+                "options": [
+                    "Một cấu trúc dữ liệu tuần tự với kích thước cố định",
+                    "Một danh sách không cần con trỏ",
+                    "Một cấu trúc dữ liệu được lưu trữ trong mảng",
+                    "Một cấu trúc dữ liệu động với các phần tử liên kết bằng con trỏ"
+                ],
+                "answerIndex": 3
+            },
+            {
+                "question": "Mỗi nút trong danh sách liên kết đơn chứa các trường nào?",
+                "options": [
+                    "Dữ liệu và con trỏ đến nút trước",
+                    "Dữ liệu và con trỏ đến nút tiếp theo",
+                    "Chỉ có dữ liệu",
+                    "Chỉ có con trỏ"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Thao tác nào sau đây không áp dụng được trong danh sách liên kết đơn?",
+                "options": [
+                    "Xóa phần tử ở giữa",
+                    "Duyệt danh sách",
+                    "Thêm phần tử vào đầu",
+                    "Truy cập ngẫu nhiên phần tử"
+                ],
+                "answerIndex": 3
+            },
+            {
+                "question": "Chèn một phần tử vào danh sách liên kết đơn ở vị trí giữa yêu cầu:",
+                "options": [
+                    "Không thể chèn ở giữa",
+                    "Truy cập trực tiếp vị trí cần chèn",
+                    "Duyệt danh sách đến vị trí cần chèn",
+                    "Chèn vào cuối danh sách"
+                ],
+                "answerIndex": 2
+            },
+            {
+                "question": "Nếu con trỏ head của danh sách liên kết đơn trỏ đến NULL, điều này có nghĩa là gì?",
+                "options": [
+                    "Danh sách trống",
+                    "Danh sách đầy",
+                    "Danh sách bị lỗi",
+                    "Không thể thêm phần tử"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Độ phức tạp thời gian trung bình của việc tìm kiếm phần tử trong danh sách liên kết đơn là gì?",
+                "options": [
+                    "O(1)",
+                    "O(log n)",
+                    "O(n^2)",
+                    "O(n)"
+                ],
+                "answerIndex": 3
+            },
+            {
+                "question": "Khi chèn phần tử mới vào cuối danh sách liên kết đơn, phần tử cuối cùng phải có con trỏ next trỏ đến:",
+                "options": [
+                    "NULL",
+                    "Chính nó",
+                    "Đầu danh sách",
+                    "Không xác định"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Để xóa phần tử đầu tiên trong danh sách liên kết đơn, ta cần cập nhật:",
+                "options": [
+                    "Dữ liệu của phần tử đầu tiên",
+                    "Con trỏ head",
+                    "Không cần cập nhật gì",
+                    "Phần tử cuối cùng"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Lệnh nào giải phóng bộ nhớ của một nút trong danh sách liên kết đơn?",
+                "options": [
+                    "delete(ptr);",
+                    "remove(ptr);",
+                    "free(ptr);",
+                    "release(ptr);"
+                ],
+                "answerIndex": 2
+            },
+            {
+                "question": "Con trỏ prev trong danh sách liên kết đôi trỏ đến phần tử nào?",
+                "options": [
+                    "Phần tử tiếp theo",
+                    "Phần tử trước đó",
+                    "Phần tử đầu tiên",
+                    "NULL"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Nếu head->prev == NULL, điều đó có nghĩa là gì?",
+                "options": [
+                    "Đây là phần tử đầu tiên",
+                    "Phần tử trước đó bị xóa",
+                    "Không có phần tử cuối",
+                    "Danh sách rỗng"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Độ phức tạp trung bình của việc tìm kiếm trong danh sách liên kết đôi là:",
+                "options": [
+                    "O(1)",
+                    "O(log n)",
+                    "O(n^2)",
+                    "O(n)"
+                ],
+                "answerIndex": 3
+            },
+            {
+                "question": "Trong danh sách liên kết đôi, để xóa phần tử ở giữa danh sách, cần cập nhật con trỏ nào?",
+                "options": [
+                    "prev của phần tử trước",
+                    "Không cần cập nhật",
+                    "Không có đáp án đúng",
+                    "next của phần tử trước"
+                ],
+                "answerIndex": 3
+            },
+            {
+                "question": "Trong danh sách liên kết đôi, phần tử cuối cùng có con trỏ next trỏ đến đâu?",
+                "options": [
+                    "Phần tử đầu tiên",
+                    "NULL",
+                    "Không xác định",
+                    "Chính nó"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Khi chèn một nút mới vào giữa danh sách liên kết đôi, cần cập nhật bao nhiêu con trỏ?",
+                "options": [
+                    "2",
+                    "1",
+                    "4",
+                    "3"
+                ],
+                "answerIndex": 2
+            },
+            {
+                "question": "Ưu điểm chính của danh sách liên kết đôi so với danh sách liên kết đơn là gì?",
+                "options": [
+                    "Duyệt danh sách theo cả hai hướng",
+                    "Truy cập nhanh hơn",
+                    "Sử dụng ít bộ nhớ hơn",
+                    "Không cần cấp phát động"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Trong danh sách liên kết đôi, phần tử đầu tiên có prev trỏ đến:",
+                "options": [
+                    "NULL",
+                    "Chính nó",
+                    "Phần tử cuối cùng",
+                    "Không xác định"
+                ],
+                "answerIndex": 0
+            }
+        ];
+
+        // Quiz state
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let quizCompleted = false;
+
+        // DOM elements
+        const quizContainer = document.getElementById('quiz-container');
+        const resultsContainer = document.getElementById('results-container');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const scoreText = document.getElementById('score-text');
+        const correctCount = document.getElementById('correct-count');
+        const incorrectCount = document.getElementById('incorrect-count');
+        const restartBtn = document.getElementById('restart-btn');
+        const feedbackContainer = document.getElementById('feedback-container');
+        const feedbackMessage = document.getElementById('feedback-message');
+        const correctAnswer = document.getElementById('correct-answer');
+
+        // Initialize quiz
+        function initQuiz() {
+            currentQuestionIndex = 0;
+            userAnswers = new Array(quizData.length).fill(null);
+            quizCompleted = false;
+            showQuestion();
+            updateNavigation();
+        }
+
+        // Show current question
+        function showQuestion() {
+            const question = quizData[currentQuestionIndex];
+            questionText.textContent = question.question;
+            
+            optionsContainer.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors';
+                optionDiv.id = `option-${index}`;
+                
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = 'option';
+                radio.value = index;
+                radio.id = `radio-${index}`;
+                radio.className = 'mr-3';
+                
+                if (userAnswers[currentQuestionIndex] === index) {
+                    radio.checked = true;
+                }
+                
+                const label = document.createElement('label');
+                label.htmlFor = `radio-${index}`;
+                label.className = 'flex-1 cursor-pointer';
+                label.textContent = option;
+                
+                optionDiv.appendChild(radio);
+                optionDiv.appendChild(label);
+                
+                optionDiv.addEventListener('click', () => {
+                    radio.checked = true;
+                    userAnswers[currentQuestionIndex] = index;
+                    showFeedback(index);
+                    updateNavigation();
+                });
+                
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            updateProgress();
+            hideFeedback();
+        }
+
+        // Show feedback for selected answer
+        function showFeedback(selectedIndex) {
+            const question = quizData[currentQuestionIndex];
+            const isCorrect = selectedIndex === question.answerIndex;
+            
+            // Update option styling
+            question.options.forEach((option, index) => {
+                const optionDiv = document.getElementById(`option-${index}`);
+                if (index === selectedIndex) {
+                    if (isCorrect) {
+                        optionDiv.className = 'flex items-center p-4 border-2 border-green-500 bg-green-50 rounded-lg';
+                    } else {
+                        optionDiv.className = 'flex items-center p-4 border-2 border-red-500 bg-red-50 rounded-lg';
+                    }
+                } else if (index === question.answerIndex) {
+                    optionDiv.className = 'flex items-center p-4 border-2 border-green-500 bg-green-50 rounded-lg';
+                }
+            });
+            
+            // Show feedback message
+            if (isCorrect) {
+                feedbackContainer.className = 'mt-4 p-4 bg-green-50 border border-green-200 rounded-lg';
+                feedbackMessage.className = 'font-semibold text-green-800';
+                feedbackMessage.textContent = '✓ Đúng!';
+                correctAnswer.textContent = '';
+            } else {
+                feedbackContainer.className = 'mt-4 p-4 bg-red-50 border border-red-200 rounded-lg';
+                feedbackMessage.className = 'font-semibold text-red-800';
+                feedbackMessage.textContent = '✗ Sai!';
+                correctAnswer.textContent = `Đáp án đúng: ${question.options[question.answerIndex]}`;
+            }
+            
+            feedbackContainer.classList.remove('hidden');
+        }
+
+        // Hide feedback
+        function hideFeedback() {
+            feedbackContainer.classList.add('hidden');
+        }
+
+        // Update progress bar and text
+        function updateProgress() {
+            const progress = ((currentQuestionIndex + 1) / quizData.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressText.textContent = `${currentQuestionIndex + 1}/${quizData.length}`;
+        }
+
+        // Update navigation buttons
+        function updateNavigation() {
+            prevBtn.disabled = currentQuestionIndex === 0;
+            
+            if (currentQuestionIndex === quizData.length - 1) {
+                nextBtn.textContent = 'Xem kết quả';
+            } else {
+                nextBtn.textContent = 'Câu tiếp';
+            }
+        }
+
+        // Show results
+        function showResults() {
+            const correctAnswers = userAnswers.filter((answer, index) => 
+                answer === quizData[index].answerIndex
+            ).length;
+            
+            const incorrectAnswers = quizData.length - correctAnswers;
+            const percentage = Math.round((correctAnswers / quizData.length) * 100);
+            
+            scoreText.textContent = `Bạn đã trả lời đúng ${correctAnswers}/${quizData.length} câu (${percentage}%)`;
+            correctCount.textContent = correctAnswers;
+            incorrectCount.textContent = incorrectAnswers;
+            
+            quizContainer.classList.add('hidden');
+            resultsContainer.classList.remove('hidden');
+        }
+
+        // Event listeners
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion();
+                updateNavigation();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (userAnswers[currentQuestionIndex] === null) {
+                alert('Vui lòng chọn một đáp án!');
+                return;
+            }
+            
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                showQuestion();
+                updateNavigation();
+            } else {
+                showResults();
+            }
+        });
+
+        restartBtn.addEventListener('click', () => {
+            resultsContainer.classList.add('hidden');
+            quizContainer.classList.remove('hidden');
+            initQuiz();
+        });
+
+        // Initialize the quiz
+        initQuiz();
+    </script>
+</body>
+</html>
