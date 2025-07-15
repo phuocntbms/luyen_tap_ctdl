@@ -105,8 +105,8 @@
     </div>
 
     <script>
-        // Quiz data with all 56 questions
-        const quizData = [
+        // Quiz data with all 106 questions (56 original + 50 new)
+        let quizData = [
             {
                 "question": "Câu nào sau đây mô tả đúng về cấu trúc dữ liệu?",
                 "options": [
@@ -666,13 +666,514 @@
                     "Không xác định"
                 ],
                 "answerIndex": 0
+            },
+            {
+                "question": "Thuật toán nào sau đây có độ phức tạp O(n²)?",
+                "options": [
+                    "Bubble Sort",
+                    "Quick Sort",
+                    "Merge Sort",
+                    "Heap Sort"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Cấu trúc dữ liệu nào được sử dụng trong thuật toán DFS?",
+                "options": [
+                    "Queue",
+                    "Stack",
+                    "Array",
+                    "Tree"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Độ phức tạp thời gian của thuật toán tìm kiếm nhị phân là:",
+                "options": [
+                    "O(n)",
+                    "O(log n)",
+                    "O(n²)",
+                    "O(1)"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Thuật toán nào sau đây là thuật toán sắp xếp ổn định?",
+                "options": [
+                    "Quick Sort",
+                    "Heap Sort",
+                    "Merge Sort",
+                    "Selection Sort"
+                ],
+                "answerIndex": 2
+            },
+            {
+                "question": "Cấu trúc dữ liệu nào được sử dụng để triển khai Priority Queue?",
+                "options": [
+                    "Array",
+                    "Linked List",
+                    "Heap",
+                    "Stack"
+                ],
+                "answerIndex": 2
+            },
+            {
+                "question": "Thuật toán Dijkstra được sử dụng để tìm:",
+                "options": [
+                    "Đường đi ngắn nhất",
+                    "Cây khung nhỏ nhất",
+                    "Chu trình Euler",
+                    "Đường đi Hamilton"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Độ phức tạp không gian của thuật toán đệ quy Fibonacci là:",
+                "options": [
+                    "O(1)",
+                    "O(n)",
+                    "O(2^n)",
+                    "O(log n)"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Thuật toán nào sau đây có độ phức tạp tốt nhất trong trường hợp xấu nhất?",
+                "options": [
+                    "Bubble Sort",
+                    "Quick Sort",
+                    "Merge Sort",
+                    "Insertion Sort"
+                ],
+                "answerIndex": 2
+            },
+            {
+                "question": "Cấu trúc dữ liệu nào được sử dụng trong thuật toán BFS?",
+                "options": [
+                    "Stack",
+                    "Queue",
+                    "Array",
+                    "Tree"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Thuật toán nào sau đây là thuật toán tham lam?",
+                "options": [
+                    "Dijkstra",
+                    "Quick Sort",
+                    "Merge Sort",
+                    "Bubble Sort"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Độ phức tạp thời gian của thuật toán tìm kiếm tuyến tính là:",
+                "options": [
+                    "O(1)",
+                    "O(log n)",
+                    "O(n)",
+                    "O(n²)"
+                ],
+                "answerIndex": 2
+            },
+            {
+                "question": "Thuật toán nào sau đây được sử dụng để tìm cây khung nhỏ nhất?",
+                "options": [
+                    "Dijkstra",
+                    "Kruskal",
+                    "Floyd-Warshall",
+                    "Bellman-Ford"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Cấu trúc dữ liệu nào được sử dụng để triển khai Hash Table?",
+                "options": [
+                    "Array",
+                    "Linked List",
+                    "Tree",
+                    "Graph"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Thuật toán nào sau đây có độ phức tạp O(n log n)?",
+                "options": [
+                    "Bubble Sort",
+                    "Quick Sort",
+                    "Selection Sort",
+                    "Insertion Sort"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Độ phức tạp thời gian của thuật toán tìm kiếm trong BST là:",
+                "options": [
+                    "O(1)",
+                    "O(log n)",
+                    "O(n)",
+                    "O(n²)"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Thuật toán nào sau đây được sử dụng để tìm chu trình trong đồ thị?",
+                "options": [
+                    "DFS",
+                    "BFS",
+                    "Dijkstra",
+                    "Topological Sort"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Cấu trúc dữ liệu nào được sử dụng để triển khai LRU Cache?",
+                "options": [
+                    "Array",
+                    "Linked List",
+                    "Hash Map + Doubly Linked List",
+                    "Tree"
+                ],
+                "answerIndex": 2
+            },
+            {
+                "question": "Thuật toán nào sau đây có độ phức tạp O(1) cho thao tác chèn?",
+                "options": [
+                    "BST",
+                    "AVL Tree",
+                    "Hash Table",
+                    "Linked List"
+                ],
+                "answerIndex": 2
+            },
+            {
+                "question": "Độ phức tạp thời gian của thuật toán sắp xếp đếm là:",
+                "options": [
+                    "O(n)",
+                    "O(n log n)",
+                    "O(n²)",
+                    "O(log n)"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Thuật toán nào sau đây được sử dụng để tìm phần tử lớn nhất trong mảng?",
+                "options": [
+                    "Linear Search",
+                    "Binary Search",
+                    "Quick Sort",
+                    "Merge Sort"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Cấu trúc dữ liệu nào phù hợp nhất để kiểm tra dấu ngoặc hợp lệ trong biểu thức toán học?",
+                "options": [
+                    "Queue",
+                    "Stack",
+                    "Array",
+                    "Tree"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Độ phức tạp thời gian trung bình của thao tác tìm kiếm trong Hash Table là:",
+                "options": [
+                    "O(1)",
+                    "O(log n)",
+                    "O(n)",
+                    "O(n^2)"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Thuật toán nào sau đây dùng để duyệt cây theo chiều sâu?",
+                "options": [
+                    "BFS",
+                    "DFS",
+                    "Dijkstra",
+                    "Kruskal"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Cấu trúc dữ liệu nào phù hợp nhất để cài đặt Undo/Redo?",
+                "options": [
+                    "Queue",
+                    "Stack",
+                    "Array",
+                    "Heap"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Độ phức tạp thời gian của thuật toán Heap Sort là:",
+                "options": [
+                    "O(n)",
+                    "O(n log n)",
+                    "O(n^2)",
+                    "O(log n)"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Cấu trúc dữ liệu nào dùng để biểu diễn đồ thị bằng danh sách cạnh?",
+                "options": [
+                    "Adjacency List",
+                    "Adjacency Matrix",
+                    "Edge List",
+                    "Incidence Matrix"
+                ],
+                "answerIndex": 2
+            },
+            {
+                "question": "Thuật toán nào sau đây là thuật toán chia để trị?",
+                "options": [
+                    "Merge Sort",
+                    "Bubble Sort",
+                    "Selection Sort",
+                    "Insertion Sort"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Cấu trúc dữ liệu nào phù hợp nhất để cài đặt hàng đợi ưu tiên?",
+                "options": [
+                    "Stack",
+                    "Heap",
+                    "Array",
+                    "Linked List"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Độ phức tạp thời gian của thao tác thêm vào cuối Linked List (không có tail)?",
+                "options": [
+                    "O(1)",
+                    "O(log n)",
+                    "O(n)",
+                    "O(n^2)"
+                ],
+                "answerIndex": 2
+            },
+            {
+                "question": "Thuật toán nào sau đây dùng để tìm đường đi ngắn nhất trong đồ thị có trọng số âm?",
+                "options": [
+                    "Dijkstra",
+                    "Bellman-Ford",
+                    "Floyd-Warshall",
+                    "Prim"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Cấu trúc dữ liệu nào phù hợp nhất để cài đặt bảng băm với xử lý va chạm bằng chaining?",
+                "options": [
+                    "Array",
+                    "Linked List",
+                    "Stack",
+                    "Queue"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Độ phức tạp thời gian của thao tác xóa phần tử đầu tiên trong Linked List?",
+                "options": [
+                    "O(1)",
+                    "O(log n)",
+                    "O(n)",
+                    "O(n^2)"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Thuật toán nào sau đây dùng để duyệt cây theo mức?",
+                "options": [
+                    "DFS",
+                    "BFS",
+                    "Dijkstra",
+                    "Kruskal"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Cấu trúc dữ liệu nào phù hợp nhất để cài đặt bảng băm với open addressing?",
+                "options": [
+                    "Array",
+                    "Linked List",
+                    "Stack",
+                    "Queue"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Độ phức tạp thời gian của thao tác tìm kiếm trong cây nhị phân cân bằng (AVL)?",
+                "options": [
+                    "O(1)",
+                    "O(log n)",
+                    "O(n)",
+                    "O(n^2)"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Thuật toán nào sau đây dùng để tìm đường đi ngắn nhất giữa mọi cặp đỉnh?",
+                "options": [
+                    "Dijkstra",
+                    "Bellman-Ford",
+                    "Floyd-Warshall",
+                    "Prim"
+                ],
+                "answerIndex": 2
+            },
+            {
+                "question": "Cấu trúc dữ liệu nào phù hợp nhất để cài đặt undo cho trình soạn thảo văn bản?",
+                "options": [
+                    "Queue",
+                    "Stack",
+                    "Array",
+                    "Heap"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Độ phức tạp thời gian của thao tác thêm vào đầu Linked List?",
+                "options": [
+                    "O(1)",
+                    "O(log n)",
+                    "O(n)",
+                    "O(n^2)"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Thuật toán nào sau đây dùng để kiểm tra đồ thị có chu trình hay không?",
+                "options": [
+                    "DFS",
+                    "BFS",
+                    "Dijkstra",
+                    "Prim"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Cấu trúc dữ liệu nào phù hợp nhất để cài đặt Stack?",
+                "options": [
+                    "Array",
+                    "Linked List",
+                    "Cả hai đáp án trên",
+                    "Queue"
+                ],
+                "answerIndex": 2
+            },
+            {
+                "question": "Cấu trúc dữ liệu nào phù hợp nhất để cài đặt hàng đợi vòng (circular queue)?",
+                "options": [
+                    "Array",
+                    "Stack",
+                    "Heap",
+                    "Tree"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Độ phức tạp thời gian của thao tác tìm kiếm trong danh sách liên kết đơn là:",
+                "options": [
+                    "O(1)",
+                    "O(log n)",
+                    "O(n)",
+                    "O(n^2)"
+                ],
+                "answerIndex": 2
+            },
+            {
+                "question": "Thuật toán nào sau đây dùng để duyệt đồ thị theo chiều rộng?",
+                "options": [
+                    "DFS",
+                    "BFS",
+                    "Dijkstra",
+                    "Kruskal"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Cấu trúc dữ liệu nào phù hợp nhất để cài đặt bảng băm với open addressing?",
+                "options": [
+                    "Array",
+                    "Linked List",
+                    "Stack",
+                    "Queue"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Độ phức tạp thời gian của thao tác thêm vào đầu Stack (Array implementation) là:",
+                "options": [
+                    "O(1)",
+                    "O(log n)",
+                    "O(n)",
+                    "O(n^2)"
+                ],
+                "answerIndex": 0
+            },
+            {
+                "question": "Thuật toán nào sau đây dùng để tìm cây khung nhỏ nhất trong đồ thị?",
+                "options": [
+                    "Dijkstra",
+                    "Prim",
+                    "Floyd-Warshall",
+                    "Bellman-Ford"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Cấu trúc dữ liệu nào phù hợp nhất để cài đặt undo cho trình duyệt web?",
+                "options": [
+                    "Queue",
+                    "Stack",
+                    "Array",
+                    "Heap"
+                ],
+                "answerIndex": 1
+            },
+            {
+                "question": "Độ phức tạp thời gian của thao tác xóa phần tử cuối cùng trong Linked List (không có tail)?",
+                "options": [
+                    "O(1)",
+                    "O(log n)",
+                    "O(n)",
+                    "O(n^2)"
+                ],
+                "answerIndex": 2
+            },
+            {
+                "question": "Thuật toán nào sau đây dùng để kiểm tra tính liên thông của đồ thị?",
+                "options": [
+                    "DFS",
+                    "BFS",
+                    "Cả hai đáp án trên",
+                    "Dijkstra"
+                ],
+                "answerIndex": 2
+            },
+            {
+                "question": "Cấu trúc dữ liệu nào phù hợp nhất để cài đặt hàng đợi ưu tiên với thao tác xóa phần tử lớn nhất nhanh nhất?",
+                "options": [
+                    "Min Heap",
+                    "Max Heap",
+                    "Array",
+                    "Stack"
+                ],
+                "answerIndex": 1
             }
         ];
 
         // Quiz state
         let currentQuestionIndex = 0;
-        let userAnswers = new Array(quizData.length).fill(null);
+        let userAnswers = [];
         let quizCompleted = false;
+        let shuffledQuizData = [];
 
         // DOM elements
         const quizContainer = document.getElementById('quiz-container');
@@ -691,10 +1192,22 @@
         const feedbackMessage = document.getElementById('feedback-message');
         const correctAnswer = document.getElementById('correct-answer');
 
+        // Shuffle array function
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
         // Initialize quiz
         function initQuiz() {
+            // Shuffle quiz data
+            shuffledQuizData = shuffleArray(quizData);
             currentQuestionIndex = 0;
-            userAnswers = new Array(quizData.length).fill(null);
+            userAnswers = new Array(shuffledQuizData.length).fill(null);
             quizCompleted = false;
             showQuestion();
             updateNavigation();
@@ -702,7 +1215,7 @@
 
         // Show current question
         function showQuestion() {
-            const question = quizData[currentQuestionIndex];
+            const question = shuffledQuizData[currentQuestionIndex];
             questionText.textContent = question.question;
             
             optionsContainer.innerHTML = '';
@@ -746,7 +1259,7 @@
 
         // Show feedback for selected answer
         function showFeedback(selectedIndex) {
-            const question = quizData[currentQuestionIndex];
+            const question = shuffledQuizData[currentQuestionIndex];
             const isCorrect = selectedIndex === question.answerIndex;
             
             // Update option styling
@@ -786,16 +1299,16 @@
 
         // Update progress bar and text
         function updateProgress() {
-            const progress = ((currentQuestionIndex + 1) / quizData.length) * 100;
+            const progress = ((currentQuestionIndex + 1) / shuffledQuizData.length) * 100;
             progressBar.style.width = `${progress}%`;
-            progressText.textContent = `${currentQuestionIndex + 1}/${quizData.length}`;
+            progressText.textContent = `${currentQuestionIndex + 1}/${shuffledQuizData.length}`;
         }
 
         // Update navigation buttons
         function updateNavigation() {
             prevBtn.disabled = currentQuestionIndex === 0;
             
-            if (currentQuestionIndex === quizData.length - 1) {
+            if (currentQuestionIndex === shuffledQuizData.length - 1) {
                 nextBtn.textContent = 'Xem kết quả';
             } else {
                 nextBtn.textContent = 'Câu tiếp';
@@ -805,13 +1318,13 @@
         // Show results
         function showResults() {
             const correctAnswers = userAnswers.filter((answer, index) => 
-                answer === quizData[index].answerIndex
+                answer === shuffledQuizData[index].answerIndex
             ).length;
             
-            const incorrectAnswers = quizData.length - correctAnswers;
-            const percentage = Math.round((correctAnswers / quizData.length) * 100);
+            const incorrectAnswers = shuffledQuizData.length - correctAnswers;
+            const percentage = Math.round((correctAnswers / shuffledQuizData.length) * 100);
             
-            scoreText.textContent = `Bạn đã trả lời đúng ${correctAnswers}/${quizData.length} câu (${percentage}%)`;
+            scoreText.textContent = `Bạn đã trả lời đúng ${correctAnswers}/${shuffledQuizData.length} câu (${percentage}%)`;
             correctCount.textContent = correctAnswers;
             incorrectCount.textContent = incorrectAnswers;
             
@@ -834,7 +1347,7 @@
                 return;
             }
             
-            if (currentQuestionIndex < quizData.length - 1) {
+            if (currentQuestionIndex < shuffledQuizData.length - 1) {
                 currentQuestionIndex++;
                 showQuestion();
                 updateNavigation();
