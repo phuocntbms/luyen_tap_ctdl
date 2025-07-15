@@ -40,6 +40,13 @@
                 </div>
             </div>
 
+            <!-- Xem lại câu sai -->
+            <div class="mb-4 text-right">
+                <button id="review-wrong-btn" class="px-4 py-2 bg-yellow-400 text-white rounded-lg hover:bg-yellow-500 transition-colors">
+                    Xem lại câu sai
+                </button>
+            </div>
+
             <!-- Question -->
             <div id="question-container" class="mb-6">
                 <h2 id="question-text" class="text-xl font-semibold text-gray-800 mb-4"></h2>
@@ -1257,6 +1264,36 @@
             hideFeedback();
         }
 
+        // Lưu câu sai vào localStorage (tích lũy)
+        function saveWrongAnswer(questionObj, selectedIndex) {
+            const key = 'quiz_wrong_answers';
+            let wrongs = [];
+            try {
+                wrongs = JSON.parse(localStorage.getItem(key)) || [];
+            } catch (e) {}
+            wrongs.push({
+                question: questionObj.question,
+                options: questionObj.options,
+                answerIndex: questionObj.answerIndex,
+                selectedIndex: selectedIndex,
+                time: new Date().toISOString()
+            });
+            localStorage.setItem(key, JSON.stringify(wrongs));
+        }
+
+        // Gắn sự kiện cho nút xem lại câu sai
+        document.addEventListener('DOMContentLoaded', function() {
+            const reviewBtn = document.getElementById('review-wrong-btn');
+            if (reviewBtn) {
+                reviewBtn.addEventListener('click', showWrongAnswersModal);
+            }
+        });
+
+        // Hiển thị modal xem lại câu sai (sẽ bổ sung giao diện ở bước sau)
+        function showWrongAnswersModal() {
+            alert('Tính năng xem lại câu sai sẽ được bổ sung giao diện chi tiết ở bước tiếp theo!');
+        }
+
         // Show feedback for selected answer
         function showFeedback(selectedIndex) {
             const question = shuffledQuizData[currentQuestionIndex];
@@ -1289,6 +1326,9 @@
                 correctAnswer.textContent = `Đáp án đúng: ${question.options[question.answerIndex]}`;
             }
             
+            if (!isCorrect) {
+                saveWrongAnswer(question, selectedIndex);
+            }
             feedbackContainer.classList.remove('hidden');
         }
 
